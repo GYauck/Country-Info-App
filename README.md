@@ -6,7 +6,7 @@ __npm i__
 For this project you need to open the console on the two servers: <br>
 
 In the frontend you need to execute: <br>
-__npm run dev__ 
+__npm run dev__  <br>
 In the backend you need to execute: <br>
 __npm run start__
 <br>
