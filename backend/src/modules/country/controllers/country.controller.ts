@@ -1,5 +1,4 @@
 import {
-  Body,
   Controller,
   Get,
   NotFoundException,
@@ -30,17 +29,18 @@ export class CountryController {
     return countryInfo;
   }
 
-  @Post('/population/')
-  async getPopulationData(@Body() countryName: string) {
-    if (!countryName || countryName === 'undefined') {
-      throw new NotFoundException('Valid country name is required');
-    }
-
+  @Post('/population/:countryCode')
+  async getPopulationData(@Param('countryCode') countryName: string) {
     const countryInfo =
       await this.countryService.getPopulationData(countryName);
-    if (!countryInfo) {
-      throw new NotFoundException(`Country with name ${countryName} not found`);
-    }
+
     return countryInfo;
+  }
+
+  @Post('/flag/:countryCode')
+  async getCountryFlag(@Param('countryCode') countryName: string) {
+    const countryFlag = await this.countryService.getCountryFlag(countryName);
+
+    return countryFlag;
   }
 }

@@ -15,18 +15,22 @@ import {
 } from "@/components/ui/table";
 import {
   useGetCountryDetail,
+  useGetCountryFlag,
   useGetCountryPopulation,
 } from "@/queries/useCountries";
-import { useParams } from "react-router-dom";
+import { getNavigatePath, PublicPaths } from "@/routes";
+import { useNavigate, useParams } from "react-router-dom";
 import { BarChart, Bar, XAxis, CartesianGrid } from "recharts";
 
 const CountryDetailPage = (): JSX.Element => {
   const { countryCode } = useParams();
+  const navigate = useNavigate();
 
-  const { data: country } = useGetCountryDetail(countryCode?? '');
+  const { data: country } = useGetCountryDetail(countryCode ?? "");
   const { data: population } = useGetCountryPopulation(
     country?.commonName ?? ""
   );
+  const { data: flag } = useGetCountryFlag(country?.commonName ?? "");
 
   const chartConfig = {
     value: {
@@ -35,9 +39,20 @@ const CountryDetailPage = (): JSX.Element => {
     },
   } satisfies ChartConfig;
 
+  const navigateToCountryDetail = (countryCode: string) => {
+    navigate(
+      getNavigatePath(PublicPaths.COUNTRY_DETAILS, {
+        countryCode: countryCode,
+      })
+    );
+  };
+
   return (
     <div className="flex flex-col gap-20 mt-10 items-center justify-center">
-      <h1 className="font-bold text-4xl">{country?.officialName}</h1>
+      <div className="flex gap-20">
+        <h1 className="font-bold text-4xl">{country?.officialName}</h1>
+        <img className="w-20" src={flag?.data.flag} alt="flagImg" />
+      </div>
       <div>
         <Table className="border-2">
           <TableCaption>List of bordering countries.</TableCaption>
@@ -52,7 +67,12 @@ const CountryDetailPage = (): JSX.Element => {
           <TableBody>
             {country?.borders.map((borderCountry) => (
               <TableRow key={borderCountry.commonName}>
-                <TableCell className="font-medium">
+                <TableCell
+                  onClick={() =>
+                    navigateToCountryDetail(borderCountry.countryCode)
+                  }
+                  className="font-medium hover:underline hover:cursor-pointer"
+                >
                   {borderCountry.commonName}
                 </TableCell>
                 <TableCell className="font-medium">
@@ -67,7 +87,7 @@ const CountryDetailPage = (): JSX.Element => {
       </div>
       <div className="border-5">
         <ChartContainer config={chartConfig} className="h-[900px] w-full">
-          <BarChart accessibilityLayer data={population?.data}>
+          <BarChart accessibilityLayer data={population?.populationCounts}>
             <CartesianGrid vertical={false} />
             <XAxis
               dataKey="year"

@@ -1,12 +1,11 @@
 import { HttpService } from '@nestjs/axios';
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 @Injectable()
 export class CountryService {
   constructor(private httpService: HttpService) {}
-  private readonly logger = new Logger(CountryService.name);
 
   getAvailableCountries() {
     return this.httpService
@@ -40,5 +39,25 @@ export class CountryService {
     );
 
     return data.data;
+  }
+
+  async getCountryFlag(countryName: string) {
+    const requestBody = {
+      country: countryName,
+    };
+    const { data } = await firstValueFrom(
+      this.httpService.post(
+        'https://countriesnow.space/api/v0.1/countries/flag/images',
+        requestBody,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            accept: '*/*',
+          },
+        },
+      ),
+    );
+
+    return data;
   }
 }

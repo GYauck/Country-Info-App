@@ -18,7 +18,7 @@ export interface CountryDetailDTO {
 }
 
 export interface CountryPopulationDTO {
-  data: [
+  populationCounts: [
     {
       year: number;
       value: number;
@@ -29,5 +29,8 @@ export interface CountryPopulationDTO {
 export interface CountryFlagDTO {
   data: {
     flag: string;
+    iso2: string;
+    iso3: string;
+    name: string;
   };
 }

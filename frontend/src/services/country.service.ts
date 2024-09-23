@@ -1,10 +1,18 @@
 import { axiosFactory } from "./axios.instance";
-import { CountryDetailDTO, CountryNameDTO, CountryPopulationDTO } from "../dtos/country.dto";
+import {
+  CountryDetailDTO,
+  CountryFlagDTO,
+  CountryNameDTO,
+  CountryPopulationDTO,
+} from "../dtos/country.dto";
 
 export interface CountryServiceDefinition {
   findAll: () => Promise<CountryNameDTO[]>;
   findById: (countryCode?: string) => Promise<CountryDetailDTO>;
-  findCountryPopulation: (countryName?: string) => Promise<CountryPopulationDTO>;
+  findCountryPopulation: (
+    countryName?: string
+  ) => Promise<CountryPopulationDTO>;
+  findCountryFlag: (countryName?: string) => Promise<CountryFlagDTO>;
 }
 
 export const CountryService = (): CountryServiceDefinition => {
@@ -20,16 +28,24 @@ export const CountryService = (): CountryServiceDefinition => {
     return response.data;
   };
 
-  const findCountryPopulation = async (countryName?: string): Promise<CountryPopulationDTO> => {
+  const findCountryPopulation = async (
+    countryName?: string
+  ): Promise<CountryPopulationDTO> => {
     const response = await axiosInstance.post(`/population/${countryName}`);
-    console.log(response)
-    return response;
+    return response.data;
   };
-  
+
+  const findCountryFlag = async (
+    countryName?: string
+  ): Promise<CountryFlagDTO> => {
+    const response = await axiosInstance.post(`/flag/${countryName}`);
+    return response.data;
+  };
 
   return {
     findAll,
     findById,
-    findCountryPopulation
+    findCountryPopulation,
+    findCountryFlag,
   };
 };

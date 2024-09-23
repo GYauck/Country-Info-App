@@ -20,3 +20,10 @@ export const useGetCountryPopulation = (countryName: string) =>
     queryFn: () => CountryService().findCountryPopulation(countryName),
     enabled: !!countryName,
   });
+
+export const useGetCountryFlag = (countryName: string) =>
+  useQuery({
+    queryKey: ["countryFlag", countryName],
+    queryFn: () => CountryService().findCountryFlag(countryName),
+    enabled: !!countryName,
+  });
