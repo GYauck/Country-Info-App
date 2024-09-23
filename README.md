@@ -11,5 +11,7 @@ In the backend you need to execute: <br>
 __npm run start__
 <br>
 The backend runs on port: 3030
+<br>
 The frontend runs on port: 3000
+<br>
 Make sure the ports are free.
